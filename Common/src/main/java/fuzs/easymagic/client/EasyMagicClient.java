@@ -7,11 +7,14 @@ import fuzs.easymagic.client.handler.ChiseledBookshelfTooltipHandler;
 import fuzs.easymagic.client.renderer.blockentity.ModEnchantTableRenderer;
 import fuzs.easymagic.handler.BlockConversionHandler;
 import fuzs.easymagic.init.ModRegistry;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
-import fuzs.puzzleslib.api.client.core.v1.context.*;
-import fuzs.puzzleslib.api.client.event.v1.gui.RenderTooltipCallback;
-import fuzs.puzzleslib.api.client.renderer.v1.model.ModelLoadingHelper;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.context.BlockEntityRenderersContext;
+import fuzs.puzzleslib.common.api.client.core.v1.context.BlockStateResolverContext;
+import fuzs.puzzleslib.common.api.client.core.v1.context.GuiLayersContext;
+import fuzs.puzzleslib.common.api.client.core.v1.context.MenuScreensContext;
+import fuzs.puzzleslib.common.api.client.event.v1.gui.RenderTooltipCallback;
+import fuzs.puzzleslib.common.api.client.renderer.v1.model.ModelLoadingHelper;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.BlockStateModelLoader;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
@@ -65,14 +68,6 @@ public class EasyMagicClient implements ClientModConstructor {
     public void onRegisterBlockEntityRenderers(BlockEntityRenderersContext context) {
         context.registerBlockEntityRenderer(ModRegistry.ENCHANTING_TABLE_BLOCK_ENTITY_TYPE.value(),
                 ModEnchantTableRenderer::new);
-    }
-
-    @Override
-    public void onRegisterBlockRenderTypes(RenderTypesContext<Block> context) {
-        // this runs deferred by default, so we should have all entries from other mods available to us
-        for (Map.Entry<Block, Block> entry : BlockConversionHandler.getBlockConversions().entrySet()) {
-            context.registerChunkRenderType(entry.getValue(), context.getChunkRenderType(entry.getKey()));
-        }
     }
 
     @Override

@@ -7,11 +7,11 @@ import fuzs.easymagic.client.util.EnchantmentTooltipHelper;
 import fuzs.easymagic.config.ClientConfig;
 import fuzs.easymagic.config.ServerConfig;
 import fuzs.easymagic.world.inventory.ModEnchantmentMenu;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.TooltipBuilder;
-import fuzs.puzzleslib.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.TooltipBuilder;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -97,7 +97,14 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
                         }
                     }
                 },
-                this.getMenu()));
+                this.getMenu()) {
+            @Override
+            public void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+                if (!EasyMagic.CONFIG.get(ClientConfig.class).keepEnchantmentScreenBook()) {
+                    super.extractContents(guiGraphics, mouseX, mouseY, partialTick);
+                }
+            }
+        });
         TooltipBuilder.create().setLines(() -> {
             List<Component> tooltipLines = new ArrayList<>();
             EnchantmentTooltipHelper.gatherRerollTooltip(tooltipLines, this.minecraft.player, this.getMenu());
@@ -115,7 +122,8 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTicks);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 ENCHANTING_TABLE_LOCATION,
                 this.leftPos,
@@ -126,7 +134,7 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
                 this.imageHeight,
                 256,
                 256);
-        this.renderBook(guiGraphics, this.leftPos, this.topPos);
+        this.extractBook(guiGraphics, this.leftPos, this.topPos);
         EnchantmentNames.getInstance().initSeed(this.menu.getEnchantmentSeed());
         // don't render anything but the background just like vanilla for enchanting slots
         for (int i = 0; i < 3; ++i) {
@@ -139,16 +147,12 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
         }
 
         if (!EasyMagic.CONFIG.get(ClientConfig.class).keepEnchantmentScreenBook()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                    RerollButton.ENCHANTING_TABLE_REROLL_LOCATION,
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED,
+                    RerollButton.REROLL_SLOT_SPRITES.disabled(),
                     this.getRerollButtonX(),
                     this.getRerollButtonY(),
-                    0,
-                    0,
                     38,
-                    27,
-                    256,
-                    256);
+                    27);
         }
 
         if (EasyMagic.CONFIG.get(ServerConfig.class).dedicatedRerollCatalyst()) {
@@ -182,18 +186,17 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
     }
 
     @Override
-    protected void renderBook(GuiGraphics guiGraphics, int x, int y) {
+    public void extractBook(GuiGraphicsExtractor guiGraphics, int x, int y) {
         if (EasyMagic.CONFIG.get(ClientConfig.class).keepEnchantmentScreenBook()) {
-            super.renderBook(guiGraphics, x, y);
+            super.extractBook(guiGraphics, x, y);
         }
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
         this.noTooltipRendering = true;
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
         this.noTooltipRendering = false;
-        this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -201,7 +204,7 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
         return (ModEnchantmentMenu) super.getMenu();
     }
 
-    public static EventResult onRenderTooltip(GuiGraphics guiGraphics, Font font, int mouseX, int mouseY, List<ClientTooltipComponent> components, ClientTooltipPositioner positioner) {
+    public static EventResult onRenderTooltip(GuiGraphicsExtractor guiGraphics, Font font, int mouseX, int mouseY, List<ClientTooltipComponent> components, ClientTooltipPositioner positioner) {
         if (Minecraft.getInstance().screen instanceof ModEnchantmentScreen screen && screen.noTooltipRendering) {
             return EventResult.INTERRUPT;
         } else {

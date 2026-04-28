@@ -1,6 +1,6 @@
 package fuzs.easymagic.world.level.block.entity;
 
-import fuzs.puzzleslib.api.container.v1.ListBackedContainer;
+import fuzs.puzzleslib.common.api.container.v1.ListBackedContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;

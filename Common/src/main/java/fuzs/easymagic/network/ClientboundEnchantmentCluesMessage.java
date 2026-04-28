@@ -2,8 +2,8 @@ package fuzs.easymagic.network;
 
 import fuzs.easymagic.client.gui.screens.inventory.ModEnchantmentScreen;
 import fuzs.easymagic.world.inventory.ModEnchantmentMenu;
-import fuzs.puzzleslib.api.network.v4.message.MessageListener;
-import fuzs.puzzleslib.api.network.v4.message.play.ClientboundPlayMessage;
+import fuzs.puzzleslib.common.api.network.v4.message.MessageListener;
+import fuzs.puzzleslib.common.api.network.v4.message.play.ClientboundPlayMessage;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

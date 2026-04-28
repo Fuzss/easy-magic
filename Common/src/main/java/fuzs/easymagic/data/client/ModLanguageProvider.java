@@ -2,8 +2,8 @@ package fuzs.easymagic.data.client;
 
 import fuzs.easymagic.client.util.EnchantmentTooltipHelper;
 import fuzs.easymagic.init.ModRegistry;
-import fuzs.puzzleslib.api.client.data.v2.AbstractLanguageProvider;
-import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.client.data.v2.AbstractLanguageProvider;
+import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 

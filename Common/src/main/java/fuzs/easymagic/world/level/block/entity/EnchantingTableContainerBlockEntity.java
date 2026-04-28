@@ -4,7 +4,7 @@ import fuzs.easymagic.EasyMagic;
 import fuzs.easymagic.config.ServerConfig;
 import fuzs.easymagic.init.ModRegistry;
 import fuzs.easymagic.world.inventory.ModEnchantmentMenu;
-import fuzs.puzzleslib.api.block.v1.entity.TickingBlockEntity;
+import fuzs.puzzleslib.common.api.block.v1.entity.TickingBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -17,10 +17,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.EnchantingTableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
@@ -37,8 +36,8 @@ public class EnchantingTableContainerBlockEntity extends BaseEnchantingTableCont
     }
 
     @Override
-    public void clientTick() {
-        bookAnimationTick(this.getLevel(), this.getBlockPos(), this.getBlockState(), this);
+    public void clientTick(Level level, BlockPos blockPos, BlockState blockState) {
+        bookAnimationTick(level, blockPos, blockState, this);
     }
 
     @Override

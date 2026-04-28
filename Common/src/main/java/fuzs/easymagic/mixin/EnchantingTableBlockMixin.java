@@ -3,7 +3,7 @@ package fuzs.easymagic.mixin;
 import fuzs.easymagic.EasyMagic;
 import fuzs.easymagic.config.ServerConfig;
 import fuzs.easymagic.util.ChiseledBookshelfHelper;
-import fuzs.puzzleslib.api.item.v2.EnchantingHelper;
+import fuzs.puzzleslib.common.api.item.v2.EnchantingHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;

@@ -2,11 +2,11 @@ package fuzs.easymagic.client.handler;
 
 import fuzs.easymagic.EasyMagic;
 import fuzs.easymagic.config.ClientConfig;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.TooltipRenderHelper;
+import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.TooltipRenderHelper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ import java.util.OptionalInt;
 
 public class ChiseledBookshelfTooltipHandler {
 
-    public static void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public static void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         if (!canRenderTooltip(minecraft)) return;
         BlockHitResult hitResult = (BlockHitResult) minecraft.hitResult;
@@ -69,7 +69,7 @@ public class ChiseledBookshelfTooltipHandler {
         return false;
     }
 
-    private static void renderBookTooltip(GuiGraphics guiGraphics, int screenWidth, int screenHeight, ItemStack itemStack, Font font) {
+    private static void renderBookTooltip(GuiGraphicsExtractor guiGraphics, int screenWidth, int screenHeight, ItemStack itemStack, Font font) {
         List<ClientTooltipComponent> components = TooltipRenderHelper.getTooltip(itemStack, TooltipFlag.NORMAL);
         int posX = screenWidth / 2 - 12 + 22 + EasyMagic.CONFIG.get(ClientConfig.class).chiseledBookshelfTooltipOffsetX;
         int posY = screenHeight / 2 + 12 - getFullTooltipHeight(components, font) / 2 + EasyMagic.CONFIG.get(

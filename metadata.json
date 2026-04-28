@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "easymagic",
         "group": "fuzs.easymagic",
         "name": "Easy Magic",
-        "version": "21.11.0",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -36,13 +37,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "easymagic"
-        },
-        {
             "name": "curseforge",
             "slug": "easy-magic",
             "id": "456239"
+        },
+        {
+            "name": "github",
+            "slug": "easy-magic"
         },
         {
             "name": "modrinth",

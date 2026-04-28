@@ -2,7 +2,7 @@ package fuzs.easymagic.fabric.client;
 
 import fuzs.easymagic.EasyMagic;
 import fuzs.easymagic.client.EasyMagicClient;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import net.fabricmc.api.ClientModInitializer;
 
 public class EasyMagicFabricClient implements ClientModInitializer {

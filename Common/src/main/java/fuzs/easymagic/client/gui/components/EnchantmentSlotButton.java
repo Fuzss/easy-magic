@@ -3,7 +3,7 @@ package fuzs.easymagic.client.gui.components;
 import fuzs.easymagic.world.inventory.ModEnchantmentMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
@@ -50,8 +50,8 @@ public class EnchantmentSlotButton extends ImageButton implements TickableTextur
     }
 
     @Override
-    public void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderContents(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractContents(guiGraphics, mouseX, mouseY, partialTick);
         Font font = Minecraft.getInstance().font;
         String string = String.valueOf(this.getCost());
         int textOffsetLeft = this.getX() + 20;
@@ -64,7 +64,7 @@ public class EnchantmentSlotButton extends ImageButton implements TickableTextur
                     this.getY() + 1,
                     16,
                     16);
-            guiGraphics.drawWordWrap(font,
+            guiGraphics.textWithWordWrap(font,
                     formattedText,
                     textOffsetLeft,
                     this.getY() + 2,
@@ -78,7 +78,7 @@ public class EnchantmentSlotButton extends ImageButton implements TickableTextur
                     this.getY() + 1,
                     16,
                     16);
-            guiGraphics.drawWordWrap(font,
+            guiGraphics.textWithWordWrap(font,
                     formattedText,
                     textOffsetLeft,
                     this.getY() + 2,
@@ -87,7 +87,7 @@ public class EnchantmentSlotButton extends ImageButton implements TickableTextur
                     false);
         }
 
-        guiGraphics.drawString(font,
+        guiGraphics.text(font,
                 string,
                 textOffsetLeft + textOffsetRight,
                 this.getY() + 2 + 7,

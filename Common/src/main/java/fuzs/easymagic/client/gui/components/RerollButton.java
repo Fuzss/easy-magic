@@ -1,15 +1,15 @@
 package fuzs.easymagic.client.gui.components;
 
 import fuzs.easymagic.EasyMagic;
-import fuzs.easymagic.config.ClientConfig;
 import fuzs.easymagic.config.ServerConfig;
 import fuzs.easymagic.world.inventory.ModEnchantmentMenu;
-import fuzs.puzzleslib.api.client.gui.v2.GuiGraphicsHelper;
-import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
+import fuzs.puzzleslib.common.api.client.gui.v2.GuiGraphicsHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TickableTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -19,17 +19,44 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
 
-public class RerollButton extends SpritelessImageButton implements TickableTexture {
-    public static final Identifier ENCHANTING_TABLE_REROLL_LOCATION = EasyMagic.id(
-            "textures/gui/container/enchanting_table_reroll.png");
+public class RerollButton extends ImageButton implements TickableTexture {
+    public static final WidgetSprites REROLL_SLOT_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/reroll_slot"),
+            EasyMagic.id("container/enchanting_table/reroll_slot_disabled"),
+            EasyMagic.id("container/enchanting_table/reroll_slot_highlighted"));
+    public static final WidgetSprites REROLL_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/reroll"),
+            EasyMagic.id("container/enchanting_table/reroll_disabled"),
+            EasyMagic.id("container/enchanting_table/reroll_highlighted"));
+    public static final WidgetSprites LEVEL_SMALL_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/level_small"),
+            EasyMagic.id("container/enchanting_table/level_small_disabled"),
+            EasyMagic.id("container/enchanting_table/level_small"));
+    public static final WidgetSprites LEVEL_MEDIUM_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/level_medium"),
+            EasyMagic.id("container/enchanting_table/level_medium_disabled"),
+            EasyMagic.id("container/enchanting_table/level_medium"));
+    public static final WidgetSprites LEVEL_LARGE_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/level_large"),
+            EasyMagic.id("container/enchanting_table/level_large_disabled"),
+            EasyMagic.id("container/enchanting_table/level_large"));
+    public static final WidgetSprites LAPIS_SMALL_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/lapis_small"),
+            EasyMagic.id("container/enchanting_table/lapis_small_disabled"),
+            EasyMagic.id("container/enchanting_table/lapis_small"));
+    public static final WidgetSprites LAPIS_MEDIUM_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/lapis_medium"),
+            EasyMagic.id("container/enchanting_table/lapis_medium_disabled"),
+            EasyMagic.id("container/enchanting_table/lapis_medium"));
+    public static final WidgetSprites LAPIS_LARGE_SPRITES = new WidgetSprites(EasyMagic.id(
+            "container/enchanting_table/lapis_large"),
+            EasyMagic.id("container/enchanting_table/lapis_large_disabled"),
+            EasyMagic.id("container/enchanting_table/lapis_large"));
 
-    private final int rerollExperiencePointsCost = EasyMagic.CONFIG.get(ServerConfig.class).rerollExperiencePointsCost;
-    private final int rerollCatalystCost = EasyMagic.CONFIG.get(ServerConfig.class).rerollCatalystCost;
     private final ModEnchantmentMenu menu;
 
     public RerollButton(int x, int y, OnPress onPress, ModEnchantmentMenu menu) {
-        super(x, y, 38, 27, 0, 0, ENCHANTING_TABLE_REROLL_LOCATION, onPress);
-        this.setTextureLayout(LEGACY_TEXTURE_LAYOUT);
+        super(x, y, 38, 27, REROLL_SLOT_SPRITES, onPress);
         this.menu = menu;
     }
 
@@ -46,88 +73,76 @@ public class RerollButton extends SpritelessImageButton implements TickableTextu
     }
 
     @Override
-    public void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        if (!EasyMagic.CONFIG.get(ClientConfig.class).keepEnchantmentScreenBook()) {
-            super.renderContents(guiGraphics, mouseX, mouseY, partialTick);
-            this.renderContentDecorations(guiGraphics);
-        }
+    public void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractContents(guiGraphics, mouseX, mouseY, partialTick);
+        this.extractContentDecorations(guiGraphics);
     }
 
-    private void renderContentDecorations(GuiGraphics guiGraphics) {
-        if (this.rerollExperiencePointsCost == 0 && this.rerollCatalystCost == 0) {
+    private void extractContentDecorations(GuiGraphicsExtractor guiGraphics) {
+        int rerollExperiencePointsCost = EasyMagic.CONFIG.get(ServerConfig.class).rerollExperiencePointsCost;
+        int rerollCatalystCost = EasyMagic.CONFIG.get(ServerConfig.class).rerollCatalystCost;
+        if (rerollExperiencePointsCost == 0 && rerollCatalystCost == 0) {
+            Identifier sprite = REROLL_SPRITES.get(this.isActive(), this.isHoveredOrFocused());
             // arrow circle
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                    ENCHANTING_TABLE_REROLL_LOCATION,
-                    this.getX() + 12,
-                    this.getY() + 6,
-                    64,
-                    !this.isActive() ? 0 : this.isHoveredOrFocused() ? 30 : 15,
-                    15,
-                    15,
-                    256,
-                    256);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, this.getX() + 12, this.getY() + 6, 15, 15);
         } else {
             // arrow circle
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                    ENCHANTING_TABLE_REROLL_LOCATION,
-                    this.getX() + 3,
-                    this.getY() + 6,
-                    64,
-                    !this.isActive() ? 0 : this.isHoveredOrFocused() ? 30 : 15,
-                    15,
-                    15,
-                    256,
-                    256);
-            if (this.rerollExperiencePointsCost > 0 && this.rerollCatalystCost > 0) {
+            Identifier sprite = REROLL_SPRITES.get(this.isActive(), this.isHoveredOrFocused());
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, this.getX() + 3, this.getY() + 6, 15, 15);
+            if (rerollExperiencePointsCost > 0 && rerollCatalystCost > 0) {
                 // level orb
-                this.renderCostOrb(guiGraphics,
-                        this.getX() + (this.rerollExperiencePointsCost > 9 ? 17 : 20),
+                this.extractCostOrb(guiGraphics,
+                        this.getX() + (rerollExperiencePointsCost > 9 ? 17 : 20),
                         this.getY() + 13,
-                        38,
-                        !this.isActive() ? 39 : 0,
-                        this.rerollExperiencePointsCost,
-                        !this.isActive() ? ChatFormatting.RED : ChatFormatting.GREEN);
+                        this.selectOrbSprite(rerollExperiencePointsCost,
+                                LEVEL_SMALL_SPRITES,
+                                LEVEL_MEDIUM_SPRITES,
+                                LEVEL_LARGE_SPRITES),
+                        rerollExperiencePointsCost,
+                        this.isActive() ? ChatFormatting.GREEN : ChatFormatting.RED);
                 // lapis orb
-                this.renderCostOrb(guiGraphics,
-                        this.getX() + (this.rerollCatalystCost > 9 ? 17 : 20),
+                this.extractCostOrb(guiGraphics,
+                        this.getX() + (rerollCatalystCost > 9 ? 17 : 20),
                         this.getY() + 1,
-                        51,
-                        !this.isActive() ? 39 : 0,
-                        this.rerollCatalystCost,
-                        !this.isActive() ? ChatFormatting.RED : ChatFormatting.BLUE);
-            } else if (this.rerollExperiencePointsCost > 0) {
+                        this.selectOrbSprite(rerollCatalystCost,
+                                LAPIS_SMALL_SPRITES,
+                                LAPIS_MEDIUM_SPRITES,
+                                LAPIS_LARGE_SPRITES),
+                        rerollCatalystCost,
+                        this.isActive() ? ChatFormatting.BLUE : ChatFormatting.RED);
+            } else if (rerollExperiencePointsCost > 0) {
                 // level orb
-                this.renderCostOrb(guiGraphics,
-                        this.getX() + (this.rerollExperiencePointsCost > 9 ? 17 : 20),
+                this.extractCostOrb(guiGraphics,
+                        this.getX() + (rerollExperiencePointsCost > 9 ? 17 : 20),
                         this.getY() + 7,
-                        38,
-                        !this.isActive() ? 39 : 0,
-                        this.rerollExperiencePointsCost,
-                        !this.isActive() ? ChatFormatting.RED : ChatFormatting.GREEN);
-            } else if (this.rerollCatalystCost > 0) {
+                        this.selectOrbSprite(rerollExperiencePointsCost,
+                                LEVEL_SMALL_SPRITES,
+                                LEVEL_MEDIUM_SPRITES,
+                                LEVEL_LARGE_SPRITES),
+                        rerollExperiencePointsCost,
+                        this.isActive() ? ChatFormatting.GREEN : ChatFormatting.RED);
+            } else if (rerollCatalystCost > 0) {
                 // lapis orb
-                this.renderCostOrb(guiGraphics,
-                        this.getX() + (this.rerollCatalystCost > 9 ? 17 : 20),
+                this.extractCostOrb(guiGraphics,
+                        this.getX() + (rerollCatalystCost > 9 ? 17 : 20),
                         this.getY() + 7,
-                        51,
-                        !this.isActive() ? 39 : 0,
-                        this.rerollCatalystCost,
-                        !this.isActive() ? ChatFormatting.RED : ChatFormatting.BLUE);
+                        this.selectOrbSprite(rerollCatalystCost,
+                                LAPIS_SMALL_SPRITES,
+                                LAPIS_MEDIUM_SPRITES,
+                                LAPIS_LARGE_SPRITES),
+                        rerollCatalystCost,
+                        this.isActive() ? ChatFormatting.BLUE : ChatFormatting.RED);
             }
         }
     }
 
-    private void renderCostOrb(GuiGraphics guiGraphics, int posX, int posY, int textureX, int textureY, int cost, ChatFormatting color) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
-                ENCHANTING_TABLE_REROLL_LOCATION,
-                posX,
-                posY,
-                textureX,
-                textureY + Math.min(2, cost / 5) * 13,
-                13,
-                13,
-                256,
-                256);
+    private WidgetSprites selectOrbSprite(int cost, WidgetSprites small, WidgetSprites medium, WidgetSprites large) {
+        return cost < 5 ? small : cost < 10 ? medium : large;
+    }
+
+    private void extractCostOrb(GuiGraphicsExtractor guiGraphics, int posX, int posY, WidgetSprites widgetSprites, int cost, ChatFormatting color) {
+        Identifier sprite = widgetSprites.get(this.isActive(), this.isHoveredOrFocused());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, posX, posY, 13, 13);
         // render shadow on every side to avoid readability issues with colorful background
         Font font = Minecraft.getInstance().font;
         GuiGraphicsHelper.drawInBatch8xOutline(guiGraphics,
