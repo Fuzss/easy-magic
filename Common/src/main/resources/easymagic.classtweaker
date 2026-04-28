@@ -1,4 +1,4 @@
-accessWidener   v2  named
+classTweaker    v2  official
 extendable  method  net/minecraft/client/gui/screens/inventory/EnchantmentScreen    renderBook  (Lnet/minecraft/client/gui/GuiGraphics;II)V
 accessible  field   net/minecraft/client/gui/screens/inventory/EnchantmentScreen    ENABLED_LEVEL_SPRITES   [Lnet/minecraft/resources/Identifier;
 accessible  field   net/minecraft/client/gui/screens/inventory/EnchantmentScreen    DISABLED_LEVEL_SPRITES  [Lnet/minecraft/resources/Identifier;
