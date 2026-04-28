@@ -1,6 +1,6 @@
 package fuzs.easymagic.fabric;
 
-import fuzs.easymagic.EasyMagic;
+import fuzs.easymagic.common.EasyMagic;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;
 

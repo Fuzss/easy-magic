@@ -1,5 +1,6 @@
 classTweaker    v2  official
 accessible  method  net/minecraft/client/gui/screens/inventory/EnchantmentScreen    extractBook (Lnet/minecraft/client/gui/GuiGraphicsExtractor;II)V
+extendable  method  net/minecraft/client/gui/screens/inventory/EnchantmentScreen    extractBook (Lnet/minecraft/client/gui/GuiGraphicsExtractor;II)V
 accessible  field   net/minecraft/client/gui/screens/inventory/EnchantmentScreen    ENABLED_LEVEL_SPRITES   [Lnet/minecraft/resources/Identifier;
 accessible  field   net/minecraft/client/gui/screens/inventory/EnchantmentScreen    DISABLED_LEVEL_SPRITES  [Lnet/minecraft/resources/Identifier;
 accessible  field   net/minecraft/client/gui/screens/inventory/EnchantmentScreen    ENCHANTMENT_SLOT_DISABLED_SPRITE    Lnet/minecraft/resources/Identifier;
@@ -13,3 +14,4 @@ accessible  field   net/minecraft/world/inventory/EnchantmentMenu   random  Lnet
 accessible  field   net/minecraft/world/inventory/EnchantmentMenu   enchantmentSeed Lnet/minecraft/world/inventory/DataSlot;
 accessible  method  net/minecraft/world/inventory/EnchantmentMenu   getEnchantmentList  (Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/ItemStack;II)Ljava/util/List;
 accessible  field   net/minecraft/world/entity/player/Player    enchantmentSeed I
+accessible  field   net/minecraft/client/gui/GuiGraphicsExtractor   deferredTooltip Ljava/lang/Runnable;

@@ -1,8 +1,8 @@
 package fuzs.easymagic.neoforge.client;
 
-import fuzs.easymagic.EasyMagic;
-import fuzs.easymagic.client.EasyMagicClient;
-import fuzs.easymagic.data.client.ModLanguageProvider;
+import fuzs.easymagic.common.EasyMagic;
+import fuzs.easymagic.common.client.EasyMagicClient;
+import fuzs.easymagic.common.data.client.ModLanguageProvider;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.api.distmarker.Dist;
