@@ -1,3 +1,8 @@
 {
-  "values": []
+  "values": [
+    {
+      "id": "caverns_and_chasms:atoning_table",
+      "required": false
+    }
+  ]
 }
