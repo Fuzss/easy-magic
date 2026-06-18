@@ -120,7 +120,7 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
     public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
         // Do not call super here, it draws a bunch of stuff we again draw ourselves.
         this.extractTransparentBackground(guiGraphics);
-        this.minecraft.gui.extractDeferredSubtitles();
+        this.minecraft.gui.hud.extractDeferredSubtitles();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 ENCHANTING_TABLE_LOCATION,
                 this.leftPos,

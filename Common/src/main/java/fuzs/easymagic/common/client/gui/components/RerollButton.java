@@ -15,9 +15,12 @@ import net.minecraft.client.renderer.texture.TickableTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
+
+import java.util.Objects;
 
 public class RerollButton extends ImageButton implements TickableTexture {
     public static final WidgetSprites REROLL_SLOT_SPRITES = new WidgetSprites(EasyMagic.id(
@@ -145,12 +148,14 @@ public class RerollButton extends ImageButton implements TickableTexture {
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, posX, posY, 13, 13);
         // render shadow on every side to avoid readability issues with colorful background
         Font font = Minecraft.getInstance().font;
-        GuiGraphicsHelper.drawInBatch8xOutline(guiGraphics,
+        TextColor textColor = TextColor.fromLegacyFormat(color);
+        Objects.requireNonNull(textColor, "text color is null");
+        GuiGraphicsHelper.prepare8xTextOutline(guiGraphics,
                 font,
                 Component.literal(String.valueOf(cost)),
                 posX + 8,
                 posY + 3,
-                ARGB.opaque(color.getColor()),
+                ARGB.opaque(textColor.getValue()),
                 ARGB.opaque(0));
     }
 }

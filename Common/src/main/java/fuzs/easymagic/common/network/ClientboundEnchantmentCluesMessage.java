@@ -37,7 +37,8 @@ public record ClientboundEnchantmentCluesMessage(int containerId,
                     for (int i = 0; i < ClientboundEnchantmentCluesMessage.this.slotData.size(); i++) {
                         menu.clues.set(i, ClientboundEnchantmentCluesMessage.this.slotData.get(i));
                     }
-                    if (context.client().screen instanceof ModEnchantmentScreen screen) {
+
+                    if (context.client().gui.screen() instanceof ModEnchantmentScreen screen) {
                         screen.tickChildren();
                     }
                 }

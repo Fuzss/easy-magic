@@ -13,7 +13,7 @@ import fuzs.puzzleslib.common.api.event.v1.AddBlockEntityTypeBlocksCallback;
 import fuzs.puzzleslib.common.api.event.v1.RegistryEntryAddedCallback;
 import fuzs.puzzleslib.common.api.event.v1.core.EventPhase;
 import fuzs.puzzleslib.common.api.event.v1.entity.player.PlayerInteractEvents;
-import fuzs.puzzleslib.common.api.event.v1.server.TagsUpdatedCallback;
+import fuzs.puzzleslib.common.api.event.v1.server.ServerResourcesLoadCallback;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -60,9 +60,9 @@ public class EasyMagic implements ModConstructor {
         PlayerInteractEvents.USE_BLOCK.register(BlockConversionHandler.onUseBlock(ModRegistry.UNALTERED_ENCHANTING_TABLES_BLOCK_TAG,
                 SoundEvents.ENCHANTMENT_TABLE_USE,
                 () -> CONFIG.get(ServerConfig.class).convertVanillaEnchantingTableWhenInteracting));
-        TagsUpdatedCallback.EVENT.register(EventPhase.FIRST,
-                BlockConversionHandler.onTagsUpdated(ModRegistry.UNALTERED_ENCHANTING_TABLES_BLOCK_TAG,
-                        BLOCK_PREDICATE));
+        ServerResourcesLoadCallback.EVENT.register(EventPhase.FIRST,
+                BlockConversionHandler.onServerResourcesLoad(ModRegistry.UNALTERED_ENCHANTING_TABLES_BLOCK_TAG,
+                        BLOCK_PREDICATE)::accept);
     }
 
     @Override
