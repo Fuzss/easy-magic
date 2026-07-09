@@ -1,0 +1,10 @@
+{
+  "menu.easymagic.enchanting.experience.many": "%s kinh nghiệm",
+  "menu.easymagic.enchanting.experience.one": "1 kinh nghiệm",
+  "menu.easymagic.enchanting.reroll": "Đổi phù phép",
+  "menu.easymagic.enchanting.reroll.many": "%s thạch anh tím",
+  "menu.easymagic.enchanting.reroll.one": "1 thạch anh tím",
+  "tag.block.easymagic.unaltered_enchanting_tables": "Bàn phù phép nguyên bản",
+  "tag.item.easymagic.enchanting_catalysts": "Chất xúc tác phù phép",
+  "tag.item.easymagic.reroll_catalysts": "Chất xúc tác đổi lại"
+}
