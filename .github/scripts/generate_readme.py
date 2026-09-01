@@ -190,7 +190,7 @@ def collect_table_loaders(branch_list):
 
 
 def build_table_header(metadata, published):
-    header_columns = ["Branch", "Status", "History", "Readme", "Changelog"]
+    header_columns = ["Branch", "Status", "Links"]
 
     if metadata:
         if has_download_links(metadata.get("links", [])):
@@ -200,6 +200,9 @@ def build_table_header(metadata, published):
             ]
 
             header_columns += loader_names
+
+        else:
+            header_columns += ["Downloads"]
 
         if published:
             header_columns += ["Maven"]
@@ -274,7 +277,7 @@ def platform_links(links, minecraft=None, platform=None):
 
             entries.append(f"{MODRINTH_ICON}[Modrinth]({url})")
 
-    return "<br /> ".join(entries) if entries else "n/a"
+    return "<br />".join(entries) if entries else "n/a"
 
 
 def maven_artifact(group, id, loader, version):
@@ -295,12 +298,17 @@ def generate_table_row(
     Generate a single markdown table row.
     """
     minecraft = get_mc_version(branch)
+
+    links = [
+        f"📜 [History]({repo_url}/commits/{branch})",
+        f"📖 [README.md]({repo_url}/blob/{branch}/README.md)",
+        f"📝 [CHANGELOG.md]({repo_url}/blob/{branch}/CHANGELOG.md)"
+    ]
+
     row = [
         f"[{branch}]({repo_url}/tree/{branch})",
         display_status,
-        f"[Commits]({repo_url}/commits/{branch})",
-        f"[README.md]({repo_url}/blob/{branch}/README.md)",
-        f"[CHANGELOG.md]({repo_url}/blob/{branch}/CHANGELOG.md)"
+        "<br />".join(links)
     ]
 
     if metadata:
@@ -311,11 +319,10 @@ def generate_table_row(
         version = metadata["mod"]["version"]
         group = metadata["mod"]["group"]
 
-        if has_download_links(links):
-            row += [
-                platform_links(links, minecraft, loader)
-                for loader in branch_loaders
-            ]
+        row += [
+            platform_links(links, minecraft, loader)
+            for loader in branch_loaders
+        ]
 
         if published:
             maven_entries = [maven_artifact(group, id, "common", version)]
