@@ -83,17 +83,9 @@ def format_repo_title(repo_name: str) -> str:
     """
     Convert kebab case repository names to a human readable title.
 
-    New format
+    Format:
     forge-config-api-port -> Forge Config Api Port
-
-    Old format
-    forgeconfigapiport -> unchanged
-
-    Only transform when hyphens are present to avoid modifying legacy names.
     """
-    if "-" not in repo_name:
-        return repo_name
-
     parts = repo_name.split("-")
     return " ".join(part.capitalize() for part in parts)
 
@@ -108,9 +100,9 @@ def load_support_data():
     if VERSIONS_FILE.exists():
         with open(VERSIONS_FILE) as f:
             data = json.load(f)
-            return data.get("branches", {}), data.get("published", False)
+            return data.get("branches", {}), data.get("distributions", {}), data.get("published", False)
 
-    return {}, False
+    return {}, {}, False
 
 
 def semver_key(branch: str):
@@ -198,7 +190,7 @@ def collect_table_loaders(branch_list):
 
 
 def build_table_header(metadata, published):
-    header_columns = ["Branch", "Status", "Changelog"]
+    header_columns = ["Branch", "Status", "History", "Readme", "Changelog"]
 
     if metadata:
         if has_download_links(metadata.get("links", [])):
@@ -236,7 +228,7 @@ def get_mc_version(branch: str) -> str:
     return ".".join(parts)
 
 
-def platform_links(links, minecraft, platform):
+def platform_links(links, minecraft=None, platform=None):
     """
     Render loader download links for a table cell.
 
@@ -250,17 +242,37 @@ def platform_links(links, minecraft, platform):
         slug = link.get("slug")
 
         if name == "curseforge":
-            game_id = MOD_LOADERS.get(platform, DEFAULT_MOD_LOADER)[1]
-            entries.append(
-                f"{CURSEFORGE_ICON}"
-                f"[CurseForge](https://www.curseforge.com/minecraft/mc-mods/{slug}/files/all?version={minecraft}&gameVersionTypeId={game_id})"
-            )
+            url = f"https://www.curseforge.com/minecraft/mc-mods/{slug}/files/all"
 
-        if name == "modrinth":
-            entries.append(
-                f"{MODRINTH_ICON}"
-                f"[Modrinth](https://modrinth.com/mod/{slug}/versions?g={minecraft}&l={platform})"
-            )
+            parameters = []
+
+            if minecraft:
+                parameters.append(f"version={minecraft}")
+
+            if platform:
+                game_id = MOD_LOADERS.get(platform, DEFAULT_MOD_LOADER)[1]
+                parameters.append(f"gameVersionTypeId={game_id}")
+
+            if parameters:
+                url += f"?{'&'.join(parameters)}"
+
+            entries.append(f"{CURSEFORGE_ICON}[CurseForge]({url})")
+
+        elif name == "modrinth":
+            url = f"https://modrinth.com/mod/{slug}/versions"
+
+            parameters = []
+
+            if minecraft:
+                parameters.append(f"g={minecraft}")
+
+            if platform:
+                parameters.append(f"l={platform}")
+
+            if parameters:
+                url += f"?{'&'.join(parameters)}"
+
+            entries.append(f"{MODRINTH_ICON}[Modrinth]({url})")
 
     return "<br /> ".join(entries) if entries else "n/a"
 
@@ -275,26 +287,29 @@ def generate_table_row(
     repo_url,
     branch,
     display_status,
-    changelog_url,
     metadata,
+    distributions,
     published
 ):
     """
     Generate a single markdown table row.
     """
+    minecraft = get_mc_version(branch)
+    row = [
+        f"[{branch}]({repo_url}/tree/{branch})",
+        display_status,
+        f"[Commits]({repo_url}/commits/{branch})",
+        f"[README.md]({repo_url}/blob/{branch}/README.md)",
+        f"[CHANGELOG.md]({repo_url}/blob/{branch}/CHANGELOG.md)"
+    ]
+
     if metadata:
-        minecraft = metadata.get("minecraft") or get_mc_version(branch)
+        minecraft = metadata.get("minecraft") or minecraft
         links = metadata.get("links", [])
         branch_loaders = metadata.get("platforms", [])
         id = metadata["mod"]["id"]
         version = metadata["mod"]["version"]
         group = metadata["mod"]["group"]
-
-        row = [
-            f"[{branch}]({repo_url}/tree/{branch})",
-            display_status,
-            f"[CHANGELOG.md]({changelog_url})"
-        ]
 
         if has_download_links(links):
             row += [
@@ -311,21 +326,21 @@ def generate_table_row(
 
             row.append("<br />".join(maven_entries))
 
-    else:
-        row = [
-            f"[{branch}]({repo_url}/tree/{branch})",
-            display_status,
-            f"[CHANGELOG.md]({changelog_url})",
-            DEFAULT_DOWNLOADS
+    elif distributions:
+        links = [
+            {
+                "name": name,
+                **distribution
+            }
+            for name, distribution in distributions.items()
         ]
 
+        row.append(platform_links(links, minecraft))
+
+    else:
+        row.append(DEFAULT_DOWNLOADS)
+
     return "| " + " | ".join(row) + " |"
-
-
-def write_readme(readme_lines):
-    """Write README.md file."""
-    with open(README_FILE, "w") as f:
-        f.write("\n".join(readme_lines))
 
 
 def main():
@@ -335,7 +350,7 @@ def main():
     repo_title = format_repo_title(repo_name)
     readme_lines = [f"# {repo_title}"]
 
-    support_data, published = load_support_data()
+    support_data, distributions, published = load_support_data()
     branches = get_all_branches()
     mc_versions = group_branches_by_mc_version(branches)
 
@@ -361,14 +376,13 @@ def main():
 
             raw_status = support_data.get(branch, "archived").lower()
             display_status = SUPPORT_TYPES.get(raw_status, DEFAULT_SUPPORT_TYPE)[0]
-            changelog_url = f"{repo_url}/blob/{branch}/CHANGELOG.md"
 
             row = generate_table_row(
                 repo_url,
                 branch,
                 display_status,
-                changelog_url,
                 metadata,
+                distributions,
                 published
             )
 
@@ -380,7 +394,8 @@ def main():
         for name, description in SUPPORT_TYPES.values()
     )
 
-    write_readme(readme_lines)
+    with open(README_FILE, "w") as f:
+        f.write("\n".join(readme_lines))
 
 
 if __name__ == "__main__":
