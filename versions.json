@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "456239",
-    "distributions.curseforge.slug": "easy-magic",
-    "distributions.github.slug": "easy-magic",
-    "distributions.modrinth.id": "9hx3AbJM",
-    "distributions.modrinth.slug": "easy-magic"
+  "distributions": {
+    "curseforge": {
+      "id": "456239",
+      "slug": "easy-magic"
+    },
+    "github": {
+      "slug": "easy-magic"
+    },
+    "modrinth": {
+      "id": "9hx3AbJM",
+      "slug": "easy-magic"
+    }
   }
 }
