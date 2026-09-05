@@ -2,7 +2,6 @@ package fuzs.easymagic.common.client;
 
 import fuzs.easymagic.common.EasyMagic;
 import fuzs.easymagic.common.client.gui.screens.inventory.ModEnchantmentScreen;
-import fuzs.easymagic.common.client.handler.BlockStateTranslator;
 import fuzs.easymagic.common.client.handler.ChiseledBookshelfTooltipHandler;
 import fuzs.easymagic.common.client.renderer.blockentity.ModEnchantTableRenderer;
 import fuzs.easymagic.common.handler.BlockConversionHandler;
@@ -21,7 +20,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.function.BiConsumer;
 
@@ -40,17 +38,15 @@ public class EasyMagicClient implements ClientModConstructor {
 
     @Override
     public void onRegisterBlockStateResolver(BlockStateResolverContext context) {
-        BlockConversionHandler.getBlockConversions().forEach((Block oldBlock, Block newBlock) -> {
-            context.registerBlockStateResolver(newBlock,
+        BlockConversionHandler.getBlockConversions().forEach((Block originalBlock, Block substituteBlock) -> {
+            context.registerBlockStateResolver(substituteBlock,
                     (ResourceManager resourceManager, Executor executor) -> {
-                        return ModelLoadingHelper.loadBlockState(resourceManager, oldBlock, executor);
+                        return ModelLoadingHelper.loadBlockState(resourceManager, originalBlock, executor);
                     },
                     (BlockStateModelLoader.LoadedModels loadedModels, BiConsumer<BlockState, BlockStateModel.UnbakedRoot> blockStateConsumer) -> {
-                        Map<BlockState, BlockState> blockStates = BlockStateTranslator.INSTANCE.convertAllBlockStates(
-                                newBlock,
-                                oldBlock);
-                        for (BlockState blockState : newBlock.getStateDefinition().getPossibleStates()) {
-                            BlockStateModel.UnbakedRoot model = loadedModels.models().get(blockStates.get(blockState));
+                        for (BlockState blockState : substituteBlock.getStateDefinition().getPossibleStates()) {
+                            BlockStateModel.UnbakedRoot model = loadedModels.models()
+                                    .get(originalBlock.withPropertiesOf(blockState));
                             if (model != null) {
                                 blockStateConsumer.accept(blockState, model);
                             } else {
