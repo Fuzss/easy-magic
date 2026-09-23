@@ -204,13 +204,13 @@ def build_table_header(metadata, published):
         else:
             header_columns += ["Downloads"]
 
-        if published:
-            header_columns += ["Maven"]
-
-        return header_columns
-    
     else:
-        return header_columns + ["Downloads"]
+        header_columns += ["Downloads"]
+
+    if published:
+        header_columns += ["Maven"]
+
+    return header_columns
 
 
 def get_mc_version(branch: str) -> str:
@@ -337,19 +337,23 @@ def generate_table_row(
 
             row.append("<br />".join(maven_entries))
 
-    elif distributions:
-        links = [
-            {
-                "name": name,
-                **distribution
-            }
-            for name, distribution in distributions.items()
-        ]
-
-        row.append(platform_links(links, minecraft))
-
     else:
-        row.append(DEFAULT_DOWNLOADS)
+        if distributions:
+            links = [
+                {
+                    "name": name,
+                    **distribution
+                }
+                for name, distribution in distributions.items()
+            ]
+
+            row.append(platform_links(links, minecraft))
+
+        else:
+            row.append(DEFAULT_DOWNLOADS)
+
+        if published:
+            row.append("n/a")
 
     return "| " + " | ".join(row) + " |"
 
