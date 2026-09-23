@@ -117,8 +117,8 @@ public class ModEnchantTableRenderer extends EnchantTableRenderer {
                 poseStack.translate(0.5, 0.76171875, 0.5);
                 Direction direction = Direction.from2DDataValue((j + position) % 4);
                 float horizontalAngle = -direction.toYRot();
-                poseStack.mulPose(Axis.YP.rotationDegrees(horizontalAngle));
-                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                poseStack.rotateDegrees(Axis.YP, horizontalAngle);
+                poseStack.rotateDegrees(Axis.XP, 90.0F);
                 poseStack.translate(-0.3125, -0.3125, 0.0);
                 poseStack.scale(0.375F, 0.375F, 0.375F);
                 itemStackRenderState.submit(poseStack,
@@ -143,7 +143,7 @@ public class ModEnchantTableRenderer extends EnchantTableRenderer {
             poseStack.translate(0.0, hoverOffset + modelYScale * openness - 0.15F * (1.0F - openness), 0.0);
             float scale = openness * 0.8F + 0.2F;
             poseStack.scale(scale, scale, scale);
-            poseStack.mulPose(Axis.YP.rotation(renderState.time / 20.0F));
+            poseStack.rotate(Axis.YP, renderState.time / 20.0F);
             renderState.items.getFirst()
                     .submit(poseStack, nodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
@@ -171,9 +171,9 @@ public class ModEnchantTableRenderer extends EnchantTableRenderer {
                 if (!itemStackRenderState.isEmpty()) {
                     poseStack.pushPose();
                     poseStack.translate(0.5F, 1.0F, 0.5F);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(j * angle + renderState.time));
+                    poseStack.rotateDegrees(Axis.YP, j * angle + renderState.time);
                     poseStack.translate(0.75F, 0.0F, 0.25F);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(rotateItems ? renderState.time % 360.0F : 90.0F));
+                    poseStack.rotateDegrees(Axis.YP, rotateItems ? renderState.time % 360.0F : 90.0F);
                     poseStack.translate(0.0, 0.075 * Math.sin((renderState.time + j * 10.0) / 5.0), 0.0F);
                     itemStackRenderState.submit(poseStack,
                             nodeCollector,

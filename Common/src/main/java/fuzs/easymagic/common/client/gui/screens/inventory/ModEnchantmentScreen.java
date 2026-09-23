@@ -80,7 +80,7 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
                 } else {
                     return Collections.emptyList();
                 }
-            }).build(enchantmentSlotButton);
+            }).setExtraSpaceAfterFirstLine(false).build(enchantmentSlotButton);
         }
         AbstractWidget rerollButton = this.addRenderableWidget(new RerollButton(this.getRerollButtonX(),
                 this.getRerollButtonY(),
@@ -104,7 +104,7 @@ public class ModEnchantmentScreen extends EnchantmentScreen {
             List<Component> tooltipLines = new ArrayList<>();
             EnchantmentTooltipHelper.gatherRerollTooltip(tooltipLines, this.minecraft.player, this.getMenu());
             return tooltipLines;
-        }).build(rerollButton);
+        }).setExtraSpaceAfterFirstLine(false).build(rerollButton);
         this.tickChildren();
     }
 

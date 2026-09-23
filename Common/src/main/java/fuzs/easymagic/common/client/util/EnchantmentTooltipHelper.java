@@ -7,7 +7,7 @@ import fuzs.easymagic.common.init.ModRegistry;
 import fuzs.easymagic.common.util.PlayerExperienceHelper;
 import fuzs.easymagic.common.world.inventory.ModEnchantmentMenu;
 import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.ClientComponentSplitter;
-import fuzs.puzzleslib.common.api.init.v3.registry.ResourceKeyHelper;
+import fuzs.puzzleslib.common.api.init.v3.registry.ContentRegistrationHelper;
 import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -51,7 +51,7 @@ public final class EnchantmentTooltipHelper {
     }
 
     private static String getContainerTranslationKey(String string) {
-        return ResourceKeyHelper.getTranslationKey(ModRegistry.ENCHANTING_MENU_TYPE.key()) + "." + string;
+        return ContentRegistrationHelper.getTranslationKey(ModRegistry.ENCHANTING_MENU_TYPE.key()) + "." + string;
     }
 
     public static void gatherSlotEnchantmentsTooltip(List<EnchantmentInstance> slotData, Consumer<Component> tooltipAdder, HolderLookup.Provider registries) {

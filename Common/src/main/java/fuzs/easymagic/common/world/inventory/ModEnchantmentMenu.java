@@ -15,6 +15,7 @@ import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -277,9 +278,9 @@ public class ModEnchantmentMenu extends EnchantmentMenu implements ContainerList
             ItemStack itemStack = this.getCarried();
             if (!itemStack.isEmpty()) {
                 if (player.isAlive() && !serverPlayer.hasDisconnected()) {
-                    player.getInventory().placeItemBackInInventory(itemStack);
+                    player.getInventory().placeItemBackInInventory(itemStack, Prediction.SERVER_ONLY);
                 } else {
-                    player.drop(itemStack, false);
+                    player.drop(itemStack, false, Prediction.SERVER_ONLY);
                 }
 
                 this.setCarried(ItemStack.EMPTY);
