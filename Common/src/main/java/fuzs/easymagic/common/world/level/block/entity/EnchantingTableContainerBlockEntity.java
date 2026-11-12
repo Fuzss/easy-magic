@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
@@ -28,11 +27,6 @@ public class EnchantingTableContainerBlockEntity extends BaseEnchantingTableCont
 
     public EnchantingTableContainerBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModRegistry.ENCHANTING_TABLE_BLOCK_ENTITY_TYPE.value(), blockPos, blockState);
-    }
-
-    @Override
-    public BlockEntityType<?> getType() {
-        return ModRegistry.ENCHANTING_TABLE_BLOCK_ENTITY_TYPE.value();
     }
 
     @Override

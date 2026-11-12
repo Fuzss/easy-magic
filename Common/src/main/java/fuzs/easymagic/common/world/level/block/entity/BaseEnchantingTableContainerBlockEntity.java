@@ -1,5 +1,6 @@
 package fuzs.easymagic.common.world.level.block.entity;
 
+import fuzs.puzzleslib.common.api.block.v1.entity.BlockEntityHelper;
 import fuzs.puzzleslib.common.api.container.v1.ListBackedContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.EnchantingTableBlockEntity;
@@ -30,8 +32,8 @@ public abstract class BaseEnchantingTableContainerBlockEntity extends Enchanting
     private LockCode lockKey = LockCode.NO_LOCK;
 
     public BaseEnchantingTableContainerBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
-        super(pos, state);
-        this.type = blockEntityType;
+        super(pos, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockEntityHelper.init(this, blockEntityType, state);
     }
 
     @Override
